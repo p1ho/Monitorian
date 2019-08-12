@@ -148,11 +148,7 @@ namespace ScreenFrame
 			if (source is null)
 				return SystemDpi;
 
-			var monitorHandle = MonitorFromWindow(
-				source.Handle,
-				MONITOR_DEFAULTTO.MONITOR_DEFAULTTONEAREST);
-
-			return GetDpi(monitorHandle);
+			return GetDpiWindow(source.Handle);
 		}
 
 		/// <summary>
@@ -180,8 +176,18 @@ namespace ScreenFrame
 			if (notificationAreaHandle == IntPtr.Zero)
 				return SystemDpi;
 
+			return GetDpiWindow(notificationAreaHandle);
+		}
+
+		/// <summary>
+		/// Gets Per-Monitor DPI of the monitor to which a specified Window belongs.
+		/// </summary>
+		/// <param name="windowHandle">Window handle</param>
+		/// <returns>DPI information</returns>
+		public static DpiScale GetDpiWindow(IntPtr windowHandle)
+		{
 			var monitorHandle = MonitorFromWindow(
-				notificationAreaHandle,
+				windowHandle,
 				MONITOR_DEFAULTTO.MONITOR_DEFAULTTOPRIMARY);
 
 			return GetDpi(monitorHandle);

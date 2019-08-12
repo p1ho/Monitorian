@@ -85,6 +85,7 @@ namespace ScreenFrame
 			NotifyIcon.MouseDoubleClick += OnMouseDoubleClick;
 
 			Handlers[WM_DPICHANGED] = HandleDpiChanged;
+			Handlers[WM_DISPLAYCHANGE] = HandleDisplayChanged;
 		}
 
 		/// <summary>
@@ -161,11 +162,26 @@ namespace ScreenFrame
 		}
 
 		private const int WM_DPICHANGED = 0x02E0;
+		private const int WM_DISPLAYCHANGE = 0x007E;
 
 		private void HandleDpiChanged(ref Message m)
 		{
 			var oldDpi = _dpi;
 			_dpi = VisualTreeHelperAddition.ConvertToDpiScale(m.WParam);
+			if (!oldDpi.Equals(_dpi))
+			{
+				OnDpiChanged(oldDpi, _dpi);
+			}
+			m.Result = IntPtr.Zero;
+		}
+
+		private void HandleDisplayChanged(ref Message m)
+		{
+			if (NotifyIconHandle == IntPtr.Zero)
+				return;
+
+			var oldDpi = _dpi;
+			_dpi = VisualTreeHelperAddition.GetDpiWindow(NotifyIconHandle);
 			if (!oldDpi.Equals(_dpi))
 			{
 				OnDpiChanged(oldDpi, _dpi);
