@@ -164,12 +164,12 @@ namespace Monitorian.Core.Views.Controls
 			if (brightness < this.Minimum)
 			{
 				brightness = this.Minimum;
-				IsUnison = false;
+				//IsUnison = false;
 			}
 			else if (this.Maximum < brightness)
 			{
 				brightness = this.Maximum;
-				IsUnison = false;
+				//IsUnison = false;
 			}
 			this.Value = brightness;
 		}
